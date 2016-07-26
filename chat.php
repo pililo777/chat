@@ -29,6 +29,7 @@
 <script src="jquery.min.js"></script>
 <script src="moment.min.js"></script>
 <script src="livestamp.js"></script>
+<script src='https://cdn.rawgit.com/admsev/jquery-play-sound/master/jquery.playSound.js'></script>
 <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
 
 
@@ -36,6 +37,47 @@
  <script src="script.js"></script>
 
  <script type="text/javascript">
+
+// copiado de:
+// https://jsbin.com/ziwod/2/edit?html,js,output
+// request permission on page load
+document.addEventListener('DOMContentLoaded', function () {
+     if (Notification.permission !== "granted") {
+         Notification.requestPermission( function(status) { if (status !== 'granted') 
+    	    alert ('no estan permitidas las notificaciones');
+       });
+     }
+     //else 
+});
+
+function notifyMe(mensaje) {
+  if (!Notification) {
+    alert('Este navegador no permite notifaciones.'); 
+    return;
+  }
+
+  if (Notification.permission !== "granted") {
+    //Notification.requestPermission();
+    	Notification.requestPermission( function(status) { if (status !== 'granted') 
+    	alert ('no estan permitidas las notificaciones');
+    	});
+    }
+  else {
+    var notification = new Notification('Nuevo mensaje:', {
+      icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+      body: $(mensaje).text(),
+    });
+
+    notification.onclick = function () {
+      window.open("http://stackoverflow.com/a/13328397/1269037");      
+    };
+    
+  }
+
+}
+
+
+
  	// $(function() {
 //     $("form textarea").keypress(function (e) {
 //         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
@@ -253,6 +295,8 @@ function getMsg(){
 					$('.fecha-'+rsp.lid).livestamp();
 					$('#dataHelper').attr('last-id', rsp.lid);	
 					$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight+100);
+					$.playSound("nuevomsg")
+					notifyMe(rsp.msg);
 				}
 			},
 		error: function(rsp){
