@@ -1,7 +1,5 @@
 <?php
-// Connection
-$conn = mysql_connect("localhost", 'root', 'call');
-$db = mysql_select_db("red_social", $conn);
+include './coneccion.php';
 $json = '';
 $myid = '';
 $fid = '';
